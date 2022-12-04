@@ -117,3 +117,29 @@ homicide_df =
 ```
 
 
+Selecting the city of Baltimore, MD. 
+```{r}
+baltimore = 
+  homicide_df %>%
+  filter(city_state == "Baltimore, MD")
+```
+
+Use the glm function to fit a logistic regression with resolved vs unresolved as the outcome and victim age, sex and race as predictors. Save the output of glm as an R object; apply the broom::tidy to this object; and obtain the estimate and confidence interval of the adjusted odds ratio for solving homicides comparing male victims to female victims keeping all other variables fixed.
+
+```{r}
+fit_logistic = 
+  baltimore %>% 
+  glm(be_solve ~ victim_age + victim_race + victim_sex, data = ., family = binomial()) %>%
+  broom::tidy() %>%
+  mutate(
+    OR = exp(estimate),
+    lower = exp(estimate - qnorm(0.975)*(std.error)),
+    upper = exp(estimate + qnorm(0.975)*(std.error))
+  ) %>%
+  filter(term == "victim_sexMale") %>%
+  knitr::kable(digits = 3)
+
+fit_logistic
+```
+
+* The OR is 0.428 and 95% confidence interval is (0.326, 0.561).
