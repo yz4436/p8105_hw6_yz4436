@@ -247,3 +247,16 @@ birthweight_df %>%
   )
 ```
 
+Making two other models:
+
+* One using length at birth and gestational age as predictors (main effects only)
+* One using head circumference, length, sex, and all interactions (including the three-way interaction) between these
+
+```{r}
+remodel_bw_1 = 
+  birthweight_df %>%
+  lm(bwt ~ blength + gaweeks, data = .)
+remodel_bw_2 = 
+  birthweight_df %>%
+  lm(bwt ~ bhead + blength + babysex + bhead * blength + blength * babysex + bhead * babysex + bhead * blength * babysex, data = .)
+```
