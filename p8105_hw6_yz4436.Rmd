@@ -218,3 +218,32 @@ birthweight_df =
   )
 ```
 
+Propose a regression model for birthweight based on a hypothesized structure for the factors that underly birthweight, and firstly, I selected some variables, which are momage, menarche, parity, ppbmi, mheight, and smoken that are about mothers' conditions that might be important to factor the birthweight of babies and try to test whether them have relationship to the birthweigh. 
+
+```{r}
+remodel_bw = 
+  birthweight_df %>%
+  lm(bwt ~ momage + menarche + mheight + ppbmi + smoken, data = .)
+  
+summary(remodel_bw)
+```
+
+* Accoring to the regression medel, we could see that the overall p-value is 2.2e-16. At the same time, p-values of momage, mheight, ppbmi, and smoken are less than 0.001 sigificance level and p-value of menarche is also less than 0.01 significance level, so momage, mheight, ppbmi, menarche, and smoken are significant to make the model better.
+
+Show a plot of model residuals against fitted values – use add_predictions and add_residuals in making this plot.
+
+```{r}
+birthweight_df %>% 
+  add_residuals(remodel_bw) %>%
+  add_predictions(remodel_bw) %>% 
+  ggplot(aes(x = pred, y = resid)) + 
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme(axis.text.x = element_text(angle = 60, hjust = 1)) + 
+  labs(
+    title = "Model residuals against fitted values",
+    y = "Residuals",
+    x = "Fitted values"
+  )
+```
+
