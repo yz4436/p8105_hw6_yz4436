@@ -187,3 +187,34 @@ or_ci %>%
 
 * From the plot, we could see that New York, NY has the lowest estimate ORs and Albuquerque. NM has the largest estimate ORs, and it also have the largest range of CIs among all 50 cities.
 
+## Problem 3
+
+
+Load and clean the data for regression analysis.
+```{r}
+birthweight_df = 
+  read_csv("./data/birthweight.csv", show_col_types = FALSE)
+```
+
+Convert numeric to factor for frace(change from number to race also), mrace(change from number to race also), babysex(change from number to gender also), and malform(change from number to present or absent also), check for missing data with drop_na.
+```{r}
+birthweight_df = 
+  birthweight_df %>%
+  janitor::clean_names() %>%
+  drop_na() %>%
+  mutate(
+    frace = as.character(frace),
+    frace = recode(frace, "1" = "White", "2" = "Black", "3" = "Asian", "4" = "Puerto Rican", "8" = "Other", "9" = "Unknown"),
+    frace = as.factor(frace),
+    mrace = as.character(mrace),
+    mrace = recode(mrace, "1" = "White", "2" = "Black", "3" = "Asian", "4" = "Puerto Rican", "8" = "Other"),
+    mrace = as.factor(mrace),
+  ) %>%
+  mutate(
+    babysex = ifelse(babysex == 1, "male", "female"),
+    babysex = as.factor(babysex),
+    malform = ifelse(malform == 1, "present", "absent"),
+    malform = as.factor(malform),
+  )
+```
+
